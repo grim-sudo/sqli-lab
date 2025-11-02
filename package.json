@@ -1,0 +1,23 @@
+{
+  "name": "sqli-lab",
+  "version": "1.0.0",
+  "description": "SQL Injection Lab - Educational platform for learning SQL injection",
+  "main": "index.js",
+  "scripts": {
+    "install-all": "cd server && npm install && cd ../client && npm install",
+    "setup": "cd server && npm run setup",
+    "start-server": "cd server && npm start",
+    "start-client": "cd client && npm start",
+    "dev-server": "cd server && npm run dev",
+    "build": "cd client && npm run build"
+  },
+  "keywords": [
+    "sql-injection",
+    "security",
+    "education",
+    "cybersecurity",
+    "web-security"
+  ],
+  "author": "",
+  "license": "MIT"
+}
