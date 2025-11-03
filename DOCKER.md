@@ -47,9 +47,50 @@ docker build --no-cache -t sqli-lab:latest .
 ```
 
 ## Troubleshooting
-- If native module compilation fails during build (e.g., `sqlite3`), ensure Docker build had network access to apt repositories. The Dockerfile includes build tools, but network access is required.
-- If the container exits or fails to start, inspect logs:
 
+### Problem: "Cannot connect to the Docker daemon" / "The system cannot find the file specified"
+
+**Error message:**
+```
+ERROR: error during connect: Head "http://%2F%2F.%2Fpipe%2FdockerDesktopLinuxEngine/_ping": open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified.
+```
+
+**Solution (Windows):**
+
+1. **Check if Docker Desktop is running:**
+   ```powershell
+   # Check Docker status
+   docker info
+   ```
+
+2. **Start Docker Desktop:**
+   - Open Docker Desktop from the Start menu or system tray
+   - Wait for Docker Desktop to fully start (whale icon should be stable in system tray)
+   - Verify it's running:
+   ```powershell
+   docker ps
+   ```
+
+3. **If Docker Desktop won't start:**
+   - Restart Docker Desktop service:
+   ```powershell
+   # As Administrator
+   Restart-Service -Name "com.docker.service"
+   ```
+   - Or restart Docker Desktop from Task Manager or Settings
+
+4. **Verify Docker Desktop is configured:**
+   - Open Docker Desktop → Settings → General
+   - Ensure "Use the WSL 2 based engine" is checked (if using WSL2)
+   - Ensure "Start Docker Desktop when you log in" is enabled (optional)
+
+### Problem: Native module compilation fails during build
+
+If native module compilation fails during build (e.g., `sqlite3`), ensure Docker build had network access to apt repositories. The Dockerfile includes build tools, but network access is required.
+
+### Problem: Container exits or fails to start
+
+Inspect logs:
 ```powershell
 docker logs sqli-single
 ```
