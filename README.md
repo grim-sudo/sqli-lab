@@ -122,20 +122,6 @@ By completing this lab, students will:
    - Least privilege principle
    - Secure coding practices
 
-## 🔒 Security Notice
-
-**⚠️ IMPORTANT: This application is intentionally vulnerable for educational purposes.**
-
-- **DO NOT** deploy this application to a production environment
-- **DO NOT** use these techniques on systems you don't own or have permission to test
-- **DO NOT** store any real or sensitive data in this application
-- This lab is for **educational purposes only**
-
-Unauthorized access to computer systems is illegal. Always:
-- Obtain proper authorization before testing
-- Respect privacy and data protection laws
-- Use your knowledge ethically to improve security
-
 ## 🎮 How to Use
 
 1. **Start with the Home Page**: Read about each level and choose where to start
@@ -161,31 +147,3 @@ npm run setup
 
 ### Reset Progress
 Click the settings icon (⚙️) in the navigation bar and select "Reset Progress"
-
-## 📖 Additional Resources
-
-- [OWASP SQL Injection](https://owasp.org/www-community/attacks/SQL_Injection)
-- [PortSwigger SQL Injection](https://portswigger.net/web-security/sql-injection)
-- [SQL Injection Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html)
-
-## 🤝 Contributing
-
-This is an educational project. Feel free to:
-- Report bugs or issues
-- Suggest new levels or features
-- Improve documentation
-- Share with students and educators
-
-## 📝 License
-
-MIT License - Feel free to use this for educational purposes.
-
-## 🙏 Acknowledgments
-
-- Inspired by [OWASP Juice Shop](https://owasp.org/www-project-juice-shop/)
-- Built for cybersecurity education
-- Designed with students in mind
-
----
-
-**Happy Learning! Stay Ethical! 🛡️**
