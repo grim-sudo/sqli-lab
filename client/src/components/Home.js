@@ -66,7 +66,10 @@ function Home({ levels, progress }) {
               return (
                 <div key={level.id} className={`level-card ${!isUnlocked ? 'locked' : ''}`}>
                   <div className="level-header">
-                    <h3>Level {level.id}</h3>
+                    <h3>
+                      <span className={`level-number level-${level.id}`}>{level.id}</span>
+                      {level.title}
+                    </h3>
                     {progress[`level${level.id}`] && (
                       <span className="completed-badge">✓ Completed</span>
                     )}
@@ -74,17 +77,16 @@ function Home({ levels, progress }) {
                       <span className="locked-badge">🔒 Locked</span>
                     )}
                   </div>
-                  <h4>{level.title}</h4>
-                  <span className={`badge badge-${level.difficulty.toLowerCase()}`}>
-                    {level.difficulty}
-                  </span>
                   <p className="level-description">{level.description}</p>
                   <div className="level-objective">
                     <strong>Objective:</strong> {level.objective}
                   </div>
+                  <span className={`badge badge-${level.difficulty.toLowerCase()}`}>
+                    {level.difficulty}
+                  </span>
                   {isUnlocked ? (
-                    <Link to={`/level${level.id}`} className="btn btn-primary">
-                      {progress[`level${level.id}`] ? 'Review Level' : 'Start Level'}
+                    <Link to={`/level${level.id}`} className={`btn btn-level-${level.id}`}>
+                      {progress[`level${level.id}`] ? 'Review Level' : 'Launch Exercise'}
                     </Link>
                   ) : (
                     <button className="btn btn-primary" disabled style={{ opacity: 0.5, cursor: 'not-allowed' }}>

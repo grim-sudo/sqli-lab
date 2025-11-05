@@ -10,19 +10,18 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+  background: #1a1a1a;
   min-height: 100vh;
   color: #e0e0e0;
 }
 
 code {
   font-family: 'Courier New', Courier, monospace;
-  background: rgba(0, 255, 255, 0.1);
-  color: #00ffff;
+  background: #2a2a2a;
+  color: #4ade80;
   padding: 2px 6px;
   border-radius: 3px;
   font-size: 0.9em;
-  border: 1px solid rgba(0, 255, 255, 0.15);
 }
 
 ::-webkit-scrollbar {
@@ -30,14 +29,14 @@ code {
 }
 
 ::-webkit-scrollbar-track {
-  background: #1a1f3a;
+  background: #1a1a1a;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #00ffff;
+  background: #4a4a4a;
   border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #00cccc;
+  background: #5a5a5a;
 }

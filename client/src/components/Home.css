@@ -3,21 +3,19 @@
 }
 
 .hero-section {
-  background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #0a0e27 100%);
+  background: #1a1a1a;
   color: white;
   padding: 80px 20px;
   text-align: center;
   margin-bottom: 40px;
-  border-bottom: 2px solid rgba(0, 255, 255, 0.3);
-  box-shadow: 0 10px 40px rgba(0, 255, 255, 0.2);
+  border-bottom: 1px solid #3a3a3a;
 }
 
 .hero-title {
   font-size: 48px;
   margin-bottom: 20px;
-  font-weight: 800;
-  color: #00ffff;
-  text-shadow: 0 0 10px rgba(0, 255, 255, 0.4);
+  font-weight: 700;
+  color: #ffffff;
 }
 
 .hero-subtitle {
@@ -34,21 +32,18 @@
 }
 
 .stat-card {
-  background: rgba(0, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
+  background: #2a2a2a;
   padding: 30px 50px;
   border-radius: 12px;
   min-width: 150px;
-  border: 2px solid rgba(0, 255, 255, 0.3);
-  box-shadow: 0 0 10px rgba(0, 255, 255, 0.15);
+  border: 1px solid #3a3a3a;
 }
 
 .stat-number {
   font-size: 48px;
   font-weight: 800;
   margin-bottom: 10px;
-  color: #00ffff;
-  text-shadow: 0 0 8px rgba(0, 255, 255, 0.4);
+  color: #3b82f6;
 }
 
 .stat-label {
@@ -62,7 +57,7 @@
 
 .info-section h2 {
   margin-bottom: 20px;
-  color: #00ffff;
+  color: #ffffff;
 }
 
 .info-section p {
@@ -91,7 +86,7 @@
 
 .info-item h3 {
   margin-bottom: 10px;
-  color: #00ffff;
+  color: #ffffff;
 }
 
 .info-item p {
@@ -106,10 +101,9 @@
 
 .levels-section h2 {
   margin-bottom: 30px;
-  color: #00ffff;
+  color: #ffffff;
   text-align: center;
   font-size: 32px;
-  text-shadow: 0 0 8px rgba(0, 255, 255, 0.3);
 }
 
 .levels-grid {
@@ -119,18 +113,19 @@
 }
 
 .level-card {
-  background: rgba(26, 31, 58, 0.9);
+  background: #2a2a2a;
   border-radius: 12px;
   padding: 30px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  border: 2px solid rgba(0, 255, 255, 0.2);
+  border: 1px solid #3a3a3a;
+  position: relative;
 }
 
 .level-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 30px rgba(0, 255, 255, 0.4);
-  border-color: #00ffff;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+  border-color: #4a4a4a;
 }
 
 .level-card.locked {
@@ -141,8 +136,8 @@
 
 .level-card.locked:hover {
   transform: none;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
-  border-color: rgba(0, 255, 255, 0.2);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  border-color: #3a3a3a;
 }
 
 .level-header {
@@ -153,19 +148,46 @@
 }
 
 .level-header h3 {
-  color: #00ffff;
+  color: #ffffff;
   margin: 0;
   font-size: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.level-number {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.level-number.level-1 {
+  background: #3b82f6;
+}
+
+.level-number.level-2 {
+  background: #a855f7;
+}
+
+.level-number.level-3 {
+  background: #f97316;
 }
 
 .completed-badge {
-  background: #00ffff;
-  color: #0a0e27;
+  background: #3b82f6;
+  color: white;
   padding: 5px 12px;
   border-radius: 20px;
   font-size: 14px;
   font-weight: 700;
-  box-shadow: 0 0 5px rgba(0, 255, 255, 0.4);
 }
 
 .locked-badge {
@@ -192,18 +214,48 @@
 }
 
 .level-objective {
-  background: rgba(0, 255, 255, 0.1);
+  background: #1a1a1a;
   padding: 15px;
   border-radius: 8px;
   margin: 20px 0;
-  color: #e0e0e0;
+  color: #b0b0b0;
   font-size: 15px;
-  border: 1px solid rgba(0, 255, 255, 0.2);
+  border: 1px solid #3a3a3a;
 }
 
 .level-card .btn {
   width: 100%;
   margin-top: 15px;
+}
+
+.btn-level-1 {
+  background: #3b82f6;
+  color: white;
+  font-weight: 600;
+}
+
+.btn-level-1:hover {
+  background: #2563eb;
+}
+
+.btn-level-2 {
+  background: #a855f7;
+  color: white;
+  font-weight: 600;
+}
+
+.btn-level-2:hover {
+  background: #9333ea;
+}
+
+.btn-level-3 {
+  background: #f97316;
+  color: white;
+  font-weight: 600;
+}
+
+.btn-level-3:hover {
+  background: #ea580c;
 }
 
 .warning-section {
