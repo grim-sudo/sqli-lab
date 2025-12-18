@@ -107,6 +107,12 @@ function Level2({ updateProgress, completed }) {
             <strong>{response.completed ? '🎉 Level Complete!' : '📊 Search Results'}</strong>
             <p>{response.message}</p>
             <p><strong>Found {response.count} product(s)</strong></p>
+            {response.flag && (
+              <div className="flag-box" style={{ marginTop: '10px' }}>
+                <h4>🏳️ Flag</h4>
+                <code style={{ display: 'block', marginTop: '8px', fontSize: '16px' }}>{response.flag}</code>
+              </div>
+            )}
           </div>
         )}
 

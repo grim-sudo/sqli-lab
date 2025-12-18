@@ -26,11 +26,8 @@ COPY server/ ./server/
 # Copy built client into server/public so the server can serve static files
 COPY --from=builder /app/client/build ./server/public
 
-# Create and seed the SQLite DB at build time so image contains the data
-RUN node server/setupDatabase.js
-
 EXPOSE 5000
 ENV NODE_ENV=production
 
-# Start the server
-CMD ["node", "server/server.js"]
+# At container start, create/seed the DB so flags are generated per-run
+CMD ["sh", "-c", "node server/setupDatabase.js && node server/server.js"]

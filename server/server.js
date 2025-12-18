@@ -17,6 +17,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const dbPath = path.join(__dirname, 'sqli_lab.db');
 const db = new sqlite3.Database(dbPath);
 
+// Helper to fetch generated flags from DB
+function fetchFlag(level, callback) {
+  db.get('SELECT flag FROM flags WHERE level = ?', [level], (err, row) => {
+    if (err) return callback(err);
+    return callback(null, row ? row.flag : null);
+  });
+}
+
 // ==================== LEVEL 1: Login Bypass ====================
 // Vulnerable login endpoint - Classic authentication bypass
 app.post('/api/level1/login', (req, res) => {
@@ -42,18 +50,36 @@ app.post('/api/level1/login', (req, res) => {
       const isAdmin = row.role === 'admin';
       const completed = isAdmin;
 
+      if (completed) {
+        // fetch level 1 flag and include it in the response
+        return fetchFlag(1, (fErr, flag) => {
+          const payload = {
+            success: true,
+            completed: true,
+            user: {
+              id: row.id,
+              username: row.username,
+              email: row.email,
+              role: row.role
+            },
+            flag: flag || null,
+            message: '🎉 Level 1 Complete! You successfully bypassed authentication and accessed the admin account!'
+          };
+          if (fErr) delete payload.flag;
+          return res.json(payload);
+        });
+      }
+
       return res.json({
         success: true,
-        completed: completed,
+        completed: false,
         user: {
           id: row.id,
           username: row.username,
           email: row.email,
           role: row.role
         },
-        message: completed 
-          ? '🎉 Level 1 Complete! You successfully bypassed authentication and accessed the admin account!' 
-          : 'Login successful, but you need to access the admin account to complete this level.'
+        message: 'Login successful, but you need to access the admin account to complete this level.'
       });
     } else {
       return res.status(401).json({
@@ -89,14 +115,27 @@ app.get('/api/level2/search', (req, res) => {
       row.description && row.description.includes('FLAG{')
     );
 
+    if (foundSecret) {
+      return fetchFlag(2, (fErr, flag) => {
+        const payload = {
+          success: true,
+          completed: true,
+          products: rows,
+          count: rows.length,
+          flag: flag || null,
+          message: '🎉 Level 2 Complete! You successfully extracted hidden data!'
+        };
+        if (fErr) delete payload.flag;
+        return res.json(payload);
+      });
+    }
+
     return res.json({
       success: true,
-      completed: foundSecret,
+      completed: false,
       products: rows,
       count: rows.length,
-      message: foundSecret 
-        ? '🎉 Level 2 Complete! You successfully extracted hidden data!' 
-        : 'Search completed. Try to find the hidden product with the flag.'
+      message: 'Search completed. Try to find the hidden product with the flag.'
     });
   });
 });
@@ -128,13 +167,25 @@ app.get('/api/level3/profile', (req, res) => {
       return values.some(val => val.includes('FLAG{'));
     });
 
+    if (foundMasterFlag) {
+      return fetchFlag(3, (fErr, flag) => {
+        const payload = {
+          success: true,
+          completed: true,
+          profiles: rows,
+          flag: flag || null,
+          message: '🎉 Level 3 Complete! You mastered UNION-based SQL injection!'
+        };
+        if (fErr) delete payload.flag;
+        return res.json(payload);
+      });
+    }
+
     return res.json({
       success: true,
-      completed: foundMasterFlag,
+      completed: false,
       profiles: rows,
-      message: foundMasterFlag 
-        ? '🎉 Level 3 Complete! You mastered UNION-based SQL injection!' 
-        : 'Profile data retrieved. Try to extract data from other tables using UNION.'
+      message: 'Profile data retrieved. Try to extract data from other tables using UNION.'
     });
   });
 });

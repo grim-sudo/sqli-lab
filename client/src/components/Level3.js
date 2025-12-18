@@ -119,6 +119,12 @@ function Level3({ updateProgress, completed }) {
           <div className={`alert ${response.completed ? 'alert-success' : 'alert-info'}`}>
             <strong>{response.completed ? '🎉 Level Complete!' : '📊 Profile Data'}</strong>
             <p>{response.message}</p>
+            {response.flag && (
+              <div className="flag-box" style={{ marginTop: '10px' }}>
+                <h4>🏳️ Flag</h4>
+                <code style={{ display: 'block', marginTop: '8px', fontSize: '16px' }}>{response.flag}</code>
+              </div>
+            )}
           </div>
         )}
 

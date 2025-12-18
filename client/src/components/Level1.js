@@ -128,6 +128,12 @@ function Level1({ updateProgress, completed }) {
                 <p><strong>Role:</strong> {response.user.role}</p>
               </div>
             )}
+            {response.flag && (
+              <div className="flag-box">
+                <h4>🏳️ Flag</h4>
+                <code style={{ display: 'block', marginTop: '8px', fontSize: '16px' }}>{response.flag}</code>
+              </div>
+            )}
             {response.error && (
               <div className="error-details">
                 <h4>{response.error}</h4>
