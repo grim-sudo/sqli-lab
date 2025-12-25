@@ -1,23 +1,4 @@
-# 🚀 Get Started - SQL Injection Lab
-
-## Welcome! 👋
-
-You now have a complete, production-ready SQL Injection Lab inspired by OWASP Juice Shop!
-
----
-
-## ⚡ Quick Start (5 Minutes)
-
-### 1️⃣ Install Dependencies
-Open PowerShell in the `sqli` folder:
-
-```powershell
-cd server
-npm install
-cd ..\client
-npm install
-cd ..
-```
+This file has been removed. See `SETUP_GUIDE.md` for startup instructions (Docker and npm workflows).
 
 ### 2️⃣ Setup Database
 ```powershell

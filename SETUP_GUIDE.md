@@ -63,39 +63,60 @@ You should see:
 
 ## 🎮 Running the Application
 
-### Option 1: Run Both Servers Separately (Recommended for Development)
+### Option A — Run Using Docker (recommended for quick start)
 
-**Terminal 1 - Start the Backend:**
+This will build the image and run the lab with the server serving the built client. It is the fastest way to get the full app running in a containerized environment.
+
+From the project root run:
+
+```bash
+docker-compose up -d --build
+```
+
+- Open the app in your browser at: `http://localhost` (Traefik/router configuration may use port 80)
+- View container logs:
+
+```bash
+docker-compose logs -f
+```
+
+To stop and remove containers:
+
+```bash
+docker-compose down
+```
+
+If you need to force rebuild the images:
+
+```bash
+docker-compose up -d --build --force-recreate
+```
+
+### Option B — Run Locally with npm (development)
+
+Use this when developing the client and server separately. Start the database seed, backend, then client.
+
+**Terminal 1 — Initialize the database (required once or when you want new flags):**
+```bash
+cd server
+npm run setup
+```
+
+**Terminal 2 — Start the Backend:**
 ```bash
 cd server
 npm start
 ```
 
-You should see:
-```
-🚀 SQL Injection Lab Server running on http://localhost:5000
-📚 Ready to learn SQL Injection!
-```
+You should see the server start message and the port it listens on.
 
-**Terminal 2 - Start the Frontend:**
+**Terminal 3 — Start the Frontend:**
 ```bash
 cd client
 npm start
 ```
 
-The browser should automatically open to `http://localhost:3000`
-
-### Option 2: Using Root Package Scripts
-
-From the root `sqli` directory:
-
-```bash
-# Terminal 1
-npm run start-server
-
-# Terminal 2
-npm run start-client
-```
+The React app will open at `http://localhost:3000` by default.
 
 ## ✅ Verify Installation
 
