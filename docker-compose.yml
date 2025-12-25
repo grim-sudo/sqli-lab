@@ -16,7 +16,7 @@ services:
       - "traefik.http.routers.sqli-lab.entrypoints=web"
       - "traefik.http.routers.sqli-lab.middlewares=sqli-stripprefix"
       - "traefik.http.middlewares.sqli-stripprefix.stripprefix.prefixes=/sqli"
-      - "traefik.http.services.sqli-lab.loadbalancer.server.port=5000"
+      - "traefik.http.services.sqli-lab.loadbalancer.server.port=80"
       - "traefik.docker.network=traefik-net"
 
 networks:

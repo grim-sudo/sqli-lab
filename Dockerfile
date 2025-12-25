@@ -7,6 +7,7 @@ WORKDIR /app
 COPY client/package*.json ./client/
 RUN cd client && npm install
 COPY client/ ./client/
+ENV PUBLIC_URL=.
 RUN cd client && npm run build
 
 # Stage 2: Install server, copy server + client build, create DB
@@ -26,7 +27,7 @@ COPY server/ ./server/
 # Copy built client into server/public so the server can serve static files
 COPY --from=builder /app/client/build ./server/public
 
-EXPOSE 5000
+EXPOSE 80
 ENV NODE_ENV=production
 
 # At container start, create/seed the DB so flags are generated per-run

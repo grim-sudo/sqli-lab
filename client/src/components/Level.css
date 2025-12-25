@@ -299,6 +299,32 @@
   border: 1px solid #3b82f6;
 }
 
+/* Flag display box used in level results */
+.flag-box {
+  margin-top: 12px;
+  padding: 12px 14px;
+  background: #0f1720;
+  border-radius: 6px;
+  border: 1px solid #264152;
+}
+
+.flag-box h4 {
+  margin: 0 0 6px 0;
+  color: #10b981;
+  font-size: 16px;
+}
+
+.flag-box code {
+  display: block;
+  font-size: 18px; /* increased size for better readability */
+  line-height: 1.4;
+  color: #e6f7ef;
+}
+
+.flag-text {
+  font-size: 15px; /* slightly larger inline flag text */
+}
+
 .advanced-info {
   margin-top: 30px;
   padding: 25px;

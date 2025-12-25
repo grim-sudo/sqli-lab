@@ -7,6 +7,9 @@ function Level1({ updateProgress, completed }) {
   const [password, setPassword] = useState('');
   const [response, setResponse] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [flagInput, setFlagInput] = useState('');
+  const [flagResponse, setFlagResponse] = useState(null);
+  const [flagLoading, setFlagLoading] = useState(false);
   const [showHints, setShowHints] = useState(false);
   const [hintLevel, setHintLevel] = useState(0);
 
@@ -39,8 +42,8 @@ function Level1({ updateProgress, completed }) {
 
   const hints = [
     "SQL comments can be used to ignore the rest of a query. In SQL, -- is a comment.",
-    "Try entering: admin'-- as the username. This will comment out the password check!",
-    "The full payload: username: admin'-- password: (anything). This makes the query: SELECT * FROM users WHERE username = 'admin'--' AND password = '...'",
+    "Try crafting inputs that change how the WHERE clause is parsed; small changes can have big effects.",
+    "Combine commenting techniques with incremental tests and observe the constructed query in debug output. Avoid using full payloads provided verbatim; experiment instead.",
   ];
 
   return (
@@ -186,15 +189,48 @@ function Level1({ updateProgress, completed }) {
 
             {hintLevel >= hints.length && (
               <div className="solution-box">
-                <h4>🔑 Complete Solution:</h4>
-                <p>Enter <code>admin'--</code> as the username and anything as the password.</p>
-                <p>This works because the SQL query becomes:</p>
-                <div className="code-block">
-                  SELECT * FROM users WHERE username = 'admin'--' AND password = '...'
-                </div>
-                <p>Everything after <code>--</code> is treated as a comment and ignored!</p>
+                <h4>🔑 Final Hint (no spoilers)</h4>
+                <p>If you're stuck, try small, incremental inputs and observe how the server logs the resulting query. Focus on how comments interact with string literals and adjust your input step-by-step.</p>
+                <p>The learning outcome is to understand the interaction between input parsing and query construction rather than copying a single payload.</p>
               </div>
             )}
+          </div>
+        )}
+      </div>
+
+      <div className="flag-submit-section card" style={{ marginTop: '16px' }}>
+        <h3>Submit Flag</h3>
+        <p>Have a flag for Level 1? Submit it here to validate and mark the level complete.</p>
+        <form
+          onSubmit={async (e) => {
+            e.preventDefault();
+            setFlagLoading(true);
+            setFlagResponse(null);
+            try {
+              const res = await axios.post('/api/submit-flag', { level: 1, flag: flagInput });
+              setFlagResponse(res.data);
+              if (res.data.valid) updateProgress('level1', true);
+            } catch (err) {
+              setFlagResponse({ success: false, valid: false, message: err.response?.data?.message || 'Error submitting flag' });
+            } finally {
+              setFlagLoading(false);
+            }
+          }}
+          className="challenge-form"
+        >
+          <div className="input-group">
+            <label htmlFor="flag1">Flag</label>
+            <input id="flag1" type="text" value={flagInput} onChange={(e) => setFlagInput(e.target.value)} placeholder="Enter flag (e.g., FLAG{...})" />
+          </div>
+          <button type="submit" className="btn btn-secondary" disabled={flagLoading || !flagInput}>
+            {flagLoading ? 'Checking...' : 'Submit Flag'}
+          </button>
+        </form>
+
+        {flagResponse && (
+          <div className={`alert ${flagResponse.valid ? 'alert-success' : 'alert-error'}`} style={{ marginTop: '10px' }}>
+            <strong>{flagResponse.valid ? '✓ Valid Flag' : '✗ Invalid Flag'}</strong>
+            <p>{flagResponse.message}</p>
           </div>
         )}
       </div>

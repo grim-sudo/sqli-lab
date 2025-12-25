@@ -6,7 +6,7 @@ const fs = require('fs');
 const path = require('path');
 
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 80;
 
 // Middleware
 app.use(cors());
@@ -24,6 +24,25 @@ function fetchFlag(level, callback) {
     return callback(null, row ? row.flag : null);
   });
 }
+
+// Validate a submitted flag for a level
+app.post('/api/submit-flag', (req, res) => {
+  const { level, flag } = req.body || {};
+  const lvl = parseInt(level, 10);
+
+  if (!lvl || !flag) {
+    return res.status(400).json({ success: false, valid: false, message: 'Level and flag are required' });
+  }
+
+  db.get('SELECT flag FROM flags WHERE level = ?', [lvl], (err, row) => {
+    if (err) return res.status(500).json({ success: false, valid: false, message: 'Database error', error: err.message });
+    if (!row) return res.status(404).json({ success: false, valid: false, message: 'No flag configured for this level' });
+
+    const isValid = row.flag === flag;
+
+    return res.json({ success: true, valid: isValid, message: isValid ? 'Flag is valid!' : 'Invalid flag', level: lvl });
+  });
+});
 
 // ==================== LEVEL 1: Login Bypass ====================
 // Vulnerable login endpoint - Classic authentication bypass
@@ -216,8 +235,8 @@ app.get('/api/levels', (req, res) => {
         title: 'Union-Based Injection',
         difficulty: 'Hard',
         description: 'Extract sensitive data from other tables',
-        objective: 'Use UNION SELECT to retrieve the master flag from admin_secrets',
-        hint: 'UNION requires matching column counts. The admin_secrets table has interesting data...'
+        objective: 'Use advanced techniques to retrieve data from other tables',
+        hint: 'Observe how the application responds to different inputs and craft payloads that change the shape of returned rows. Focus on experimenting rather than relying on specific internal names.'
       }
     ]
   });

@@ -6,6 +6,9 @@ function Level2({ updateProgress, completed }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [response, setResponse] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [flagInput, setFlagInput] = useState('');
+  const [flagResponse, setFlagResponse] = useState(null);
+  const [flagLoading, setFlagLoading] = useState(false);
   const [showHints, setShowHints] = useState(false);
   const [hintLevel, setHintLevel] = useState(0);
 
@@ -37,8 +40,8 @@ function Level2({ updateProgress, completed }) {
 
   const hints = [
     "The query checks for 'hidden = 0'. What if you could make this condition always true?",
-    "Try using OR logic: ' OR 1=1-- This makes the WHERE clause always true!",
-    "The full payload: ' OR 1=1-- This will return ALL products, including hidden ones.",
+    "Use logical operators to alter the WHERE clause without breaking the surrounding query structure.",
+    "Experiment with OR and comment sequences gradually; inspect returned results and iterate. Avoid copying explicit payloads from hints.",
   ];
 
   return (
@@ -116,6 +119,8 @@ function Level2({ updateProgress, completed }) {
           </div>
         )}
 
+        
+
         {response && response.products && response.products.length > 0 && (
           <div className="products-grid">
             {response.products.map((product) => (
@@ -186,17 +191,47 @@ function Level2({ updateProgress, completed }) {
 
             {hintLevel >= hints.length && (
               <div className="solution-box">
-                <h4>🔑 Complete Solution:</h4>
-                <p>Enter <code>' OR 1=1--</code> in the search box.</p>
-                <p>This modifies the SQL query to:</p>
-                <div className="code-block">
-                  {`SELECT * FROM products 
-WHERE name LIKE '%' OR 1=1--%' 
-AND hidden = 0`}
-                </div>
-                <p>Since <code>1=1</code> is always true and the rest is commented out, all products are returned!</p>
+                <h4>🔑 Final Hint (no spoilers)</h4>
+                <p>Try small modifications to your search input and observe how results change. Build your payload step-by-step, and prefer understanding the effect of each change rather than applying a single copied string.</p>
               </div>
             )}
+          </div>
+        )}
+      </div>
+
+      <div className="flag-submit-section card" style={{ marginTop: '16px' }}>
+        <h3>Submit Flag</h3>
+        <p>Submit a Level 2 flag to validate it and complete the level.</p>
+        <form
+          onSubmit={async (e) => {
+            e.preventDefault();
+            setFlagLoading(true);
+            setFlagResponse(null);
+            try {
+              const res = await axios.post('/api/submit-flag', { level: 2, flag: flagInput });
+              setFlagResponse(res.data);
+              if (res.data.valid) updateProgress('level2', true);
+            } catch (err) {
+              setFlagResponse({ success: false, valid: false, message: err.response?.data?.message || 'Error submitting flag' });
+            } finally {
+              setFlagLoading(false);
+            }
+          }}
+          className="challenge-form"
+        >
+          <div className="input-group">
+            <label htmlFor="flag2">Flag</label>
+            <input id="flag2" type="text" value={flagInput} onChange={(e) => setFlagInput(e.target.value)} placeholder="Enter flag (e.g., FLAG{...})" />
+          </div>
+          <button type="submit" className="btn btn-secondary" disabled={flagLoading || !flagInput}>
+            {flagLoading ? 'Checking...' : 'Submit Flag'}
+          </button>
+        </form>
+
+        {flagResponse && (
+          <div className={`alert ${flagResponse.valid ? 'alert-success' : 'alert-error'}`} style={{ marginTop: '10px' }}>
+            <strong>{flagResponse.valid ? '✓ Valid Flag' : '✗ Invalid Flag'}</strong>
+            <p>{flagResponse.message}</p>
           </div>
         )}
       </div>

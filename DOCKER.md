@@ -95,9 +95,4 @@ Inspect logs:
 docker logs sqli-single
 ```
 
-## Next steps (optional)
-- I can add a `docker-compose.yml` for easier local orchestration.
-- I can retry appending these exact instructions into `README.md` if you'd like the main README updated instead of a separate file.
 
----
-Generated automatically to help run the project in a single Docker image.

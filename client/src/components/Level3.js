@@ -8,6 +8,9 @@ function Level3({ updateProgress, completed }) {
   const [loading, setLoading] = useState(false);
   const [showHints, setShowHints] = useState(false);
   const [hintLevel, setHintLevel] = useState(0);
+  const [flagInput, setFlagInput] = useState('');
+  const [flagResponse, setFlagResponse] = useState(null);
+  const [flagLoading, setFlagLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -37,9 +40,9 @@ function Level3({ updateProgress, completed }) {
 
   const hints = [
     "UNION allows you to combine results from multiple SELECT statements. They must have the same number of columns.",
-    "The users table has 4 columns: id, username, email, role. You need to match this in your UNION SELECT.",
-    "Try: 1 UNION SELECT id, secret_key, secret_value, access_level FROM admin_secrets-- to extract data from another table!",
-    "To find the master flag, look for the secret with access_level 3 or search for 'FLAG{' in the results.",
+    "Consider matching column counts and types, but avoid revealing exact internal table names.",
+    "Iteratively discover column counts and data types by trying small UNIONs and inspecting results rather than using a full payload.",
+    "Focus on gradually expanding your UNION queries and look for values that resemble flags (e.g., strings containing FLAG{).",
   ];
 
   return (
@@ -128,6 +131,8 @@ function Level3({ updateProgress, completed }) {
           </div>
         )}
 
+        
+
         {response && response.profiles && response.profiles.length > 0 && (
           <div className="profiles-container">
             <h3>Retrieved Profiles:</h3>
@@ -215,20 +220,47 @@ function Level3({ updateProgress, completed }) {
 
             {hintLevel >= hints.length && (
               <div className="solution-box">
-                <h4>🔑 Complete Solution:</h4>
-                <p>Enter this as the User ID:</p>
-                <div className="code-block">
-                  1 UNION SELECT id, secret_key, secret_value, access_level FROM admin_secrets--
-                </div>
-                <p>This creates the following SQL query:</p>
-                <div className="code-block">
-                  {`SELECT id, username, email, role FROM users WHERE id = 1 
-UNION 
-SELECT id, secret_key, secret_value, access_level FROM admin_secrets--`}
-                </div>
-                <p>The UNION combines user data with secret data. Look for the entry with access_level 3 to find the master flag!</p>
+                <h4>🔑 Final Hint (no spoilers)</h4>
+                <p>Build your UNION payload incrementally: start by matching the number of columns with simple placeholders, then replace placeholders with likely column names. Inspect returned rows for values that look like secrets. Avoid copying an entire payload; discovery is the goal.</p>
               </div>
             )}
+          </div>
+        )}
+      </div>
+
+      <div className="flag-submit-section card" style={{ marginTop: '16px' }}>
+        <h3>Submit Flag</h3>
+        <p>Submit a Level 3 flag to validate it and complete the level.</p>
+        <form
+          onSubmit={async (e) => {
+            e.preventDefault();
+            setFlagLoading(true);
+            setFlagResponse(null);
+            try {
+              const res = await axios.post('/api/submit-flag', { level: 3, flag: flagInput });
+              setFlagResponse(res.data);
+              if (res.data.valid) updateProgress('level3', true);
+            } catch (err) {
+              setFlagResponse({ success: false, valid: false, message: err.response?.data?.message || 'Error submitting flag' });
+            } finally {
+              setFlagLoading(false);
+            }
+          }}
+          className="challenge-form"
+        >
+          <div className="input-group">
+            <label htmlFor="flag3">Flag</label>
+            <input id="flag3" type="text" value={flagInput} onChange={(e) => setFlagInput(e.target.value)} placeholder="Enter flag (e.g., FLAG{...})" />
+          </div>
+          <button type="submit" className="btn btn-secondary" disabled={flagLoading || !flagInput}>
+            {flagLoading ? 'Checking...' : 'Submit Flag'}
+          </button>
+        </form>
+
+        {flagResponse && (
+          <div className={`alert ${flagResponse.valid ? 'alert-success' : 'alert-error'}`} style={{ marginTop: '10px' }}>
+            <strong>{flagResponse.valid ? '✓ Valid Flag' : '✗ Invalid Flag'}</strong>
+            <p>{flagResponse.message}</p>
           </div>
         )}
       </div>
