@@ -258,6 +258,13 @@ app.get('/api/health', (req, res) => {
 // Serve React client build (if present)
 const clientBuildPath = path.join(__dirname, 'public');
 if (fs.existsSync(clientBuildPath)) {
+  // Inject runtime config before serving static files
+  app.get('/config.js', (req, res) => {
+    const mainWebUrl = process.env.MAIN_WEB_URL || 'https://letushack.com';
+    res.type('application/javascript');
+    res.send(`window.__APP_CONFIG__ = { MAIN_WEB_URL: "${mainWebUrl}" };`);
+  });
+
   app.use(express.static(clientBuildPath));
 
   // For any non-API routes, serve index.html (React Router support)

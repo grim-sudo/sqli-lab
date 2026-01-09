@@ -6,7 +6,8 @@ import Level1 from './components/Level1';
 import Level2 from './components/Level2';
 import Level3 from './components/Level3';
 import Navigation from './components/Navigation';
-import axios from 'axios';
+import axios from './axios-config';
+import { labApi } from './lib/labApi';
 
 function App() {
   const [levels, setLevels] = useState([]);
@@ -15,11 +16,25 @@ function App() {
     level2: false,
     level3: false
   });
+  const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
     fetchLevels();
-    loadProgress();
+    initializeUser();
   }, []);
+
+  const initializeUser = async () => {
+    try {
+      const user = await labApi.getCurrentUser();
+      if (user) {
+        setCurrentUser(user);
+        loadProgress(user.user_id);
+      }
+    } catch (error) {
+      console.error('Error fetching user:', error);
+      loadProgress('guest'); // Fallback for development
+    }
+  };
 
   const fetchLevels = async () => {
     try {
@@ -30,23 +45,30 @@ function App() {
     }
   };
 
-  const loadProgress = () => {
-    const savedProgress = localStorage.getItem('sqli_progress');
+  const loadProgress = (userId) => {
+    const storageKey = `sqli_progress_${userId}`;
+    const savedProgress = localStorage.getItem(storageKey);
     if (savedProgress) {
       setProgress(JSON.parse(savedProgress));
+    } else {
+      setProgress({ level1: false, level2: false, level3: false });
     }
   };
 
   const updateProgress = (level, completed) => {
     const newProgress = { ...progress, [level]: completed };
     setProgress(newProgress);
-    localStorage.setItem('sqli_progress', JSON.stringify(newProgress));
+    const userId = currentUser?.user_id || 'guest';
+    const storageKey = `sqli_progress_${userId}`;
+    localStorage.setItem(storageKey, JSON.stringify(newProgress));
   };
 
   const resetProgress = () => {
     const resetState = { level1: false, level2: false, level3: false };
     setProgress(resetState);
-    localStorage.setItem('sqli_progress', JSON.stringify(resetState));
+    const userId = currentUser?.user_id || 'guest';
+    const storageKey = `sqli_progress_${userId}`;
+    localStorage.setItem(storageKey, JSON.stringify(resetState));
   };
 
   return (

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import axios from '../axios-config';
 import './Level.css';
+import { labApi } from '../lib/labApi';
 
 function Level2({ updateProgress, completed }) {
   const [searchQuery, setSearchQuery] = useState('');
@@ -210,7 +211,29 @@ function Level2({ updateProgress, completed }) {
             try {
               const res = await axios.post('/api/submit-flag', { level: 2, flag: flagInput });
               setFlagResponse(res.data);
-              if (res.data.valid) updateProgress('level2', true);
+              if (res.data.valid) {
+                updateProgress('level2', true);
+                // Submit score to main platform
+                try {
+                  const user = await labApi.getCurrentUser();
+                  if (user) {
+                    const result = await labApi.updateLabScore({
+                      user_id: user.user_id,
+                      lab_id: 3, // SQL Injection lab_id
+                      level: 2,
+                      score: 33,
+                      solved: true,
+                    });
+                    // If already completed, that's fine - user is just practicing
+                    if (!result) {
+                      console.log('Level already completed previously - no points awarded');
+                    }
+                  }
+                } catch (scoreError) {
+                  // Silently handle if already completed
+                  console.log('Score update result:', scoreError);
+                }
+              }
             } catch (err) {
               setFlagResponse({ success: false, valid: false, message: err.response?.data?.message || 'Error submitting flag' });
             } finally {
